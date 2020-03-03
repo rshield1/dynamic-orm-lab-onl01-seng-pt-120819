@@ -16,4 +16,5 @@ class Student < InteractiveRecord
     column_names.compact
   end
   
+  
 end
