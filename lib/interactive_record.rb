@@ -2,13 +2,13 @@ require_relative "../config/environment.rb"
 require 'active_support/inflector'
 
 class InteractiveRecord
-def initialize(options={})
-    options.each do |property, value|
-      self.send("#{property}=", value)
-    end
-  end
   
-   def self.column_names
+  
+def self.table_name
+    "#{self.to_s.downcase}s"
+  end
+
+  def self.column_names
 
     sql = "pragma table_info('#{table_name}')"
 
@@ -19,7 +19,13 @@ def initialize(options={})
     end
     column_names.compact
   end
-  
+
+  def initialize(options={})
+    options.each do |property, value|
+      self.send("#{property}=", value)
+    end
+  end
+
   def save
     sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
     DB[:conn].execute(sql)
@@ -53,4 +59,6 @@ def initialize(options={})
     sql = "SELECT * FROM #{self.table_name} WHERE #{attribute_hash.keys.first} = #{formatted_value}"
     DB[:conn].execute(sql)
   end
+  
+  
 end
