@@ -4,6 +4,12 @@ require 'interactive_record.rb'
 
 class Student < InteractiveRecord
   
+  def initialize(options={})
+    options.each do |property, value|
+      self.send("#{property}=", value)
+    end
+  end
+  
    def self.column_names
 
     sql = "pragma table_info('#{table_name}')"
